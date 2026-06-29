@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging into Amazon ECR
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 771211825239.dkr.ecr.us-east-1.amazonaws.com
+
+  build:
+    commands:
+      - echo Building Docker image
+      - docker build -t evershop-app .
+      - docker tag evershop-app:latest 771211825239.dkr.ecr.us-east-1.amazonaws.com/evershop-app:latest
+
+  post_build:
+    commands:
+      - echo Pushing image
+      - docker push 771211825239.dkr.ecr.us-east-1.amazonaws.com/evershop-app:latest
